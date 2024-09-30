@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Fitness Health Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        header {
+            background: #4CAF50;
+            color: #fff;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .progress-section {
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        canvas {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Fitness Health Tracker</h1>
+        <nav>
+            <a href="workout.html">Log Workout</a>
+            <a href="diet.html">Log Meal</a>
+            <a href="index.html">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="progress-section">
+            <h2>Your Progress</h2>
+            <canvas id="calorieChart"></canvas>
+        </section>
+    </main>
+
+    <script>
+        let workouts = [];
+        let meals = [];
+
+        // Simulate getting stored data
+        function loadData() {
+            // Example data: replace with actual data retrieval
+            workouts = [
+                { activityType: 'Running', duration: 30, calories: 300 },
+                { activityType: 'Cycling', duration: 45, calories: 400 }
+            ];
+            meals = [
+                { foodItem: 'Breakfast', calories: 500 },
+                { foodItem: 'Lunch', calories: 700 },
+                { foodItem: 'Dinner', calories: 600 }
+            ];
+        }
+
+        function calculateCalories() {
+            const totalBurned = workouts.reduce((acc, workout) => acc + workout.calories, 0);
+            const totalIntake = meals.reduce((acc, meal) => acc + meal.calories, 0);
+            return { totalBurned, totalIntake };
+        }
+
+        function renderChart() {
+            const { totalBurned, totalIntake } = calculateCalories();
+
+            const ctx = document.getElementById('calorieChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Calories Burned', 'Calories Intake'],
+                    datasets: [{
+                        label: 'Calories',
+                        data: [totalBurned, totalIntake],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)'
+                        ],
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            renderChart();
+        });
+    </script>
+</body>
+</html>
